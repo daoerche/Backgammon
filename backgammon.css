@@ -1,0 +1,56 @@
+/*-------------------Base----------------------*/
+.chess-pieces-black {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(10px circle at 60% 35%, #999 10%, #333 160%);
+}
+.chess-pieces-white {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(10px circle at 60% 35%, #fff 10%, #999 160%);
+}
+
+
+/*------------------Layout---------------------*/
+#container {
+    width: 525px;
+
+    margin: 70px auto;
+    padding: 15px;
+
+    box-shadow: 0 0 10px 1px #ddd;
+    outline: 1px solid #efefef;
+}
+#chessboard {
+    width: 525px;
+    height: 525px;
+
+    outline: 1px solid #aaaaaa;
+}
+.box {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+
+    width: 35px;
+    height: 35px;
+
+    outline: 1px solid #aaaaaa;
+}
+
+
+/*------------------Module---------------------*/
+
+
+/*-------------------State---------------------*/
+
+
+/*-------------------Theme---------------------*/
