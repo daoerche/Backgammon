@@ -1,5 +1,6 @@
 /*-------------------Base----------------------*/
 .chess-pieces-black {
+    z-index: 100;
     position: absolute;
     width: 30px;
     height: 30px;
@@ -9,6 +10,7 @@
     background: radial-gradient(10px circle at 60% 35%, #999 10%, #333 160%);
 }
 .chess-pieces-white {
+    z-index: 100;
     position: absolute;
     width: 30px;
     height: 30px;
