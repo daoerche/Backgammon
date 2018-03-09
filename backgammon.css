@@ -32,13 +32,13 @@
     outline: 1px solid #efefef;
 }
 #chessboard {
+    position: relative;
     width: 525px;
     height: 525px;
 
     outline: 1px solid #aaaaaa;
 }
 .box {
-    position: relative;
     display: inline-block;
     vertical-align: top;
 

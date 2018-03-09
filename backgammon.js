@@ -15,16 +15,18 @@ window.onload = function () {
 
             chess: document.getElementById("chessboard"),
 
-            addPiece: function (target, top, left) {
+            over: false,
+
+            addPiece: function (x, y) {
                 let item = document.createElement("div");
                 if(this.curColor)
                     item.classList.add("chess-pieces-black");
                 else
                     item.classList.add("chess-pieces-white");
 
-                item.style.top = top + "px";
-                item.style.left = left + "px";
-                target.appendChild(item);
+                item.style.left = (-15 + (y*35)) + "px";
+                item.style.top = (-15 + (x*35)) + "px";
+                this.chess.appendChild(item);
             },
 
             winKindsCount: 672,
@@ -82,9 +84,45 @@ window.onload = function () {
                 return wins;
             })(),
 
+            curChess: (function () {
+                let arr = [];
+                for(let i=0; i<16; i++) {
+                    arr[i] = [];
+                    for(let j=0; j<16; j++) {
+                        arr[i][j] = false;
+                    }
+                }
+
+                return arr;
+            })(),
+
             myWins: [],
 
+            myScore: (function () {
+                let arr = [];
+                for(let i=0; i<16; i++) {
+                    arr[i] = [];
+                    for(let j=0; j<16; j++) {
+                        arr[i][j] = 0;
+                    }
+                }
+
+                return arr;
+            })(),
+
             computerWins: [],
+
+            computerScore: (function () {
+                let arr = [];
+                for(let i=0; i<16; i++) {
+                    arr[i] = [];
+                    for(let j=0; j<16; j++) {
+                        arr[i][j] = 0;
+                    }
+                }
+
+                return arr;
+            })(),
 
             changeColor: function () {
                 this.curColor = !this.curColor;
@@ -98,6 +136,8 @@ window.onload = function () {
                 this.chess.innerHTML = allCell;
 
                 this.chess.addEventListener("click", (event) => {
+                    if(this.over) return false;
+
                     let target = event.target,
                         x = event.offsetX,
                         y = event.offsetY,
@@ -119,35 +159,34 @@ window.onload = function () {
 
                     // top left
                     if(x<=10 && y<=10) {
-                        this.addPiece(target, -15, -15);
-
                         chessX = Math.floor(curIndex/15);
                         chessY = curIndex%15;
 
                         // top right
                     }else if(x>=25 && y<=10) {
-                        this.addPiece(target, -15, 20);
-
                         chessX = Math.floor(curIndex/15);
                         chessY = curIndex%15+1;
 
                         // bottom left
                     }else if(x<=10 && y>=25) {
-                        this.addPiece(target, 20, -15);
-
                         chessX = Math.floor(curIndex/15)+1;
                         chessY = curIndex%15;
 
                         // bottom right
                     }else if(x>=25 && y>=25) {
-                        this.addPiece(target, 20, 20);
-
                         chessX = Math.floor(curIndex/15)+1;
                         chessY = curIndex%15+1;
                     }
 
                     // not in click range
-                    if(!chessX && !chessY) return false;
+                    if(typeof chessX === "undefined" && typeof chessY === "undefined") return false;
+
+                    // drop this point
+                    console.log(chessX, chessY);
+                    this.addPiece(chessX, chessY);
+
+                    // log this point
+                    this.curChess[chessX][chessY] = true;
 
                     // count wins
                     for(let k=0; k<this.winKindsCount; k++) {
@@ -158,6 +197,8 @@ window.onload = function () {
 
                                 if(this.myWins[k] >= 5) {
                                     alert("you win!");
+                                    this.over = true;
+                                    return false;
                                 }
 
                             // computer
@@ -166,6 +207,104 @@ window.onload = function () {
 
                                 if(this.computerWins[k] >= 5) {
                                     alert("computer win!");
+                                    this.over = true;
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+
+                    // change chess pieces color
+                    this.changeColor();
+
+                    // computer AI
+                    for(let i=0; i<16; i++) {
+                        for(let j=0; j<16; j++) {
+                            // this point not drop
+                            if(!this.curChess[i][j]) {
+                                for(let k=0; k<this.winKindsCount; k++) {
+                                    if(this.wins[i][j][k]) {
+                                        // check users
+                                        if(this.myWins[k] === 1) {
+                                            this.myScore[i][j] += 2;
+                                        }else if(this.myWins[k] === 2) {
+                                            this.myScore[i][j] += 4;
+                                        }else if(this.myWins[k] === 3) {
+                                            this.myScore[i][j] += 50;
+                                        }else if(this.myWins[k] === 4) {
+                                            this.myScore[i][j] += 200;
+                                        }else if(this.myWins[k] >= 5) {
+                                            this.myScore[i][j] += 500;
+                                        }
+
+                                        // check computer
+                                        if(this.computerWins[k] === 1) {
+                                            this.computerScore[i][j] += 3;
+                                        }else if(this.computerWins[k] === 2) {
+                                            this.computerScore[i][j] += 5;
+                                        }else if(this.computerWins[k] === 3) {
+                                            this.computerScore[i][j] += 10;
+                                        }else if(this.computerWins[k] === 4) {
+                                            this.computerScore[i][j] += 300;
+                                        }else if(this.computerWins[k] >= 5) {
+                                            this.computerScore[i][j] += 1000;
+                                        }
+                                     }
+                                }
+                            }
+                        }
+                    }
+
+                    // get next computer x, y
+                    let max = this.myScore[0][0],
+                        u = 0,
+                        v = 0;
+                    for(let i=0; i<16; i++) {
+                        for(let j=0; j<16; j++) {
+                            // if this point not drop, try count this weight.
+                            if(!this.curChess[i][j]) {
+                                if(max < this.myScore[i][j]) {
+                                    max = this.myScore[i][j];
+                                    u = i;
+                                    v = j;
+                                }
+
+                                if(max < this.computerScore[i][j]) {
+                                    max = this.computerScore[i][j];
+                                    u = i;
+                                    v = j;
+                                }
+                            }
+                        }
+                    }
+
+                    console.log(u, v, max);
+                    this.addPiece(u, v);
+
+                    // log this point
+                    this.curChess[u][v] = true;
+
+                    // count wins
+                    for(let k=0; k<this.winKindsCount; k++) {
+                        if(this.wins[u][v][k]) {
+                            // users
+                            if(this.curColor) {
+                                this.myWins[k] = (this.myWins[k] === undefined) ? 1 : this.myWins[k]+1;
+
+                                if(this.myWins[k] >= 5) {
+                                    alert("you win!");
+                                    this.over = true;
+                                    return false;
+                                }
+
+                                // computer
+                            }else {
+                                this.computerWins[k] = (this.computerWins[k] === undefined) ? 1 : this.computerWins[k]+1;
+
+                                if(this.computerWins[k] >= 5) {
+                                    alert("computer win!");
+                                    this.over = true;
+                                    return false;
                                 }
                             }
                         }
