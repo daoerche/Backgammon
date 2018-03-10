@@ -25,6 +25,8 @@ window.onload = function () {
 
             reBtn: document.getElementById("r"),
 
+            chessFlag: document.getElementById("chessFlag"),
+
             /**
              * judge game is computer vs user or user vs user
              * false --> user vs user
@@ -143,6 +145,11 @@ window.onload = function () {
 
             changeColor: function () {
                 this.curColor = !this.curColor;
+                if(this.curColor) {
+                    chessFlag.className = "chess-pieces-black";
+                }else {
+                    chessFlag.className = "chess-pieces-white";
+                }
             },
 
             checkIsWin: function (x, y) {
@@ -245,6 +252,12 @@ window.onload = function () {
 
                     return arr;
                 })();
+
+                if(this.curColor) {
+                    chessFlag.className = "chess-pieces-black";
+                }else {
+                    chessFlag.className = "chess-pieces-white";
+                }
             },
 
             /**

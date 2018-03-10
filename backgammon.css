@@ -55,6 +55,12 @@ p {
 #operate {
     width: 525px;
     margin: 20px auto;
+
+    position: relative;
+}
+#chessFlag {
+    top: 0px;
+    right: 0px;
 }
 
 
