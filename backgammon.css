@@ -25,7 +25,7 @@
 #container {
     width: 525px;
 
-    margin: 70px auto;
+    margin: 30px auto;
     padding: 15px;
 
     box-shadow: 0 0 10px 1px #ddd;
@@ -47,9 +47,38 @@
 
     outline: 1px solid #aaaaaa;
 }
+p {
+    font-family: "Microsoft YaHei UI";
+    margin: 30px auto;
+    text-align: center;
+}
+#operate {
+    width: 525px;
+    margin: 20px auto;
+}
 
 
 /*------------------Module---------------------*/
+.oper-btn {
+    font-family: "Microsoft YaHei UI";
+    font-size: 1.125em;
+    color: #333333;
+
+    padding:5px 20px;
+    background-color: transparent;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #333333;
+}
+.oper-btn:hover {
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #333333;
+}
+.oper-btn:focus {
+    outline: none;
+}
 
 
 /*-------------------State---------------------*/
